@@ -1,0 +1,88 @@
+################################################################################
+### 🚀 INFO 🚀 #################################################################
+################################################################################
+
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+# https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+# https://docs.fastlane.tools/plugins/available-plugins
+
+default_platform(:ios)
+
+################################################################################
+### 🚀 SONARQUBE 🚀 ##########################################################
+################################################################################
+
+desc "Execute Lizard Analysis"
+lane :app_lizard_analysis do |options|
+  lizard(
+    source_folder: "Vibra",
+    language: 'swift,objectivec',
+    export_type: 'xml',
+    report_file: "#{options[:workspace]}/sonar-reports/lizard-report.xml"
+  )
+end
+
+desc "Execute Sonar Qube"
+lane :app_sonar_analysis do |options|
+  Dir.chdir("..") do   
+    sh(
+      "rm -rf #{options[:workspace]}/sonarqube-generic-coverage.xml"
+    )
+    sh(
+      "#{options[:workspace]}/xccov-to-sonarqube-generic.sh #{options[:result_path]} > #{options[:workspace]}/sonarqube-generic-coverage.xml"
+    )
+  end
+
+  target_name = "<target_name>"
+  app_actual_version = get_version_number(target: target_name)
+
+  sonar(
+    sonar_organization: "<company_name>",
+    sonar_login: options[:sonar_token],
+    sources_path: "#{options[:workspace]}/<main_folder_of_code>",
+    project_version: app_actual_version
+  )
+end
+
+################################################################################
+### 🚀 DISTRIBUTION XCODE CLOUD 🚀 ############################################
+################################################################################
+
+desc "Execute Update Build Version & Commit & Push & TAG"
+lane :app_archive_post_actions do |options|
+
+  target_name = "<target_name>"
+  build_config_debug = "Debug"
+  build_config_release = "Release"
+
+  # get new build number
+  app_actual_version = get_version_number(target: target_name)
+  UI.message "Current Scheme (#{options[:scheme]}) with App Version (" + app_actual_version + ") and new build number (#{options[:new_build_number]})"
+
+  # Target App
+  increment_build_number_in_xcodeproj(target: target_name, build_number: "#{options[:new_build_number]}", build_configuration_name: build_config_debug)
+  increment_build_number_in_xcodeproj(target: target_name, build_number: "#{options[:new_build_number]}", build_configuration_name: build_config_release)
+
+  git_add(
+    path: ".",
+    shell_escape: false
+  )
+  git_commit(
+    allow_nothing_to_commit: true,
+    path: ".",
+    message:"BUMP version from Xcode Cloud"
+  )
+  add_git_tag(
+    tag: "release_" + app_actual_version + "_build_#{options[:new_build_number]}"
+  )
+
+end
+
+################################################################################
+###############################################################################
+################################################################################
