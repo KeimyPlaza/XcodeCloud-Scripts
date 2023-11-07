@@ -20,7 +20,7 @@ default_platform(:ios)
 desc "Execute Lizard Analysis"
 lane :app_lizard_analysis do |options|
   lizard(
-    source_folder: "Vibra",
+    source_folder: "<main_folder_of_code>",
     language: 'swift,objectivec',
     export_type: 'xml',
     report_file: "#{options[:workspace]}/sonar-reports/lizard-report.xml"
@@ -75,7 +75,7 @@ lane :app_archive_post_actions do |options|
   git_commit(
     allow_nothing_to_commit: true,
     path: ".",
-    message:"BUMP version from Xcode Cloud"
+    message:"<custom_message_push>"
   )
   add_git_tag(
     tag: "release_" + app_actual_version + "_build_#{options[:new_build_number]}"

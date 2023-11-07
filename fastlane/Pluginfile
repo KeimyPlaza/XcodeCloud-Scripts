@@ -2,7 +2,6 @@
 #
 # Ensure this file is checked in to source control!
 
-gem 'fastlane-plugin-icon_versioning'
 gem 'fastlane-plugin-hours'
 gem 'fastlane-plugin-versioning'
 gem 'fastlane-plugin-get_product_bundle_id'
