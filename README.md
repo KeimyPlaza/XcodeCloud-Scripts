@@ -13,7 +13,7 @@ Este repositorio contiene scripts **vitaminados** :mechanical_arm: para Xcode Cl
 
 1. Clona el repositorio
 2. Copia en tu proyecto (carpeta raíz) los siguientes elementos:
-   - Carpeta `ci_script`
+   - Carpeta `ci_scripts`
    - Carpeta `fastlane`
    - Fichero `sonar-project.properties`
    - Fichero `xccov-to-sonarqube-generic.sh` (Dale permisos de ejecución)
@@ -43,7 +43,7 @@ A día de hoy, noviembre 2023, Apple considera que las cosas en este ámbito deb
 
 ![custom_build_scripts](resources/writing_customs_build_scripts.png)
 
-Os cuento algunas cosas que he vivido y he tenido que ir adaptando según se presentaban.
+Así que os cuento algunas cosas que he vivido y he tenido que ir adaptando según se presentaban:
 
 ### Unit Testing y Coverage en Sonar
 
@@ -56,7 +56,7 @@ Cuando defines un worflow sencillo para la CI, donde lo que quieres es que compi
 
 Hasta aquí todo bien. :smiley:
 
-La cosa se complica cuando después de estos resultados de Unit Testing quieres enviarlos a un Sonar y por tanto debes extraer la información de los test passados, su resultado y el Coverage.
+La cosa se complica cuando después de estos resultados de Unit Testing quieres enviarlos a un Sonar y por tanto debes extraer la información de los test pasados, su resultado y el Coverage.
 
 Revisando la documentación, no indica en que momento se ejecuta el paso "Test - iOS" y tampoco que exista un posterior script donde actuar sobre él. Por tanto, asumes que debes hacerlo en el Post-XcodeBuild, pero resulta que cuando lo lanzas de nuevo y observas que hace, ves que la ejecución del script en el paso de "Test -iOS", ha realizado una **especie de reset** del workspace local y los ficheros fastlane, sonar-properties que habías preparado y subido al repositorio no están disponibles.
 
