@@ -113,7 +113,7 @@ Y así es como conseguimos invocar al resto de acciones para subir el resultado 
 * [Get the most out of Xcode Cloud](https://developer.apple.com/videos/play/wwdc2022/110374/)
 * [Create practical workflows in Xcode Cloud](https://developer.apple.com/videos/play/wwdc2023/10278/)
 
-## LICENSE
+## LICENSE 🚧
 
 Estos trabajos están disponibles bajo la licencia MIT. Mira el fichero [LICENSE](license) para más información.
 
